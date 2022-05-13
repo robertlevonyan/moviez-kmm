@@ -1,0 +1,16 @@
+CREATE TABLE movie (
+ _id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+ backdrop_path TEXT,
+ poster_path TEXT,
+ genre_ids TEXT,
+ original_title TEXT,
+ title TEXT,
+ overview TEXT
+);
+
+selectAll:
+ SELECT * FROM movie;
+
+insert:
+ INSERT OR IGNORE INTO movie(_id, backdrop_path, poster_path, genre_ids, original_title, title, overview)
+ VALUES ?;

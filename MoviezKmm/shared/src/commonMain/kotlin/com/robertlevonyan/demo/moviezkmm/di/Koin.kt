@@ -6,29 +6,38 @@ import com.robertlevonyan.demo.moviezkmm.constants.Constants.LOCAL_DS_TV
 import com.robertlevonyan.demo.moviezkmm.constants.Constants.REMOTE_DS_MOVIES
 import com.robertlevonyan.demo.moviezkmm.constants.Constants.REMOTE_DS_TV
 import com.robertlevonyan.demo.moviezkmm.data.DataSource
+import com.robertlevonyan.demo.moviezkmm.data.local.DriverFactory
 import com.robertlevonyan.demo.moviezkmm.data.local.LocalMoviesDataSource
 import com.robertlevonyan.demo.moviezkmm.data.remote.RemoteMoviesDataSource
 import com.robertlevonyan.demo.moviezkmm.data.remote.RemoteTvShowsDataSource
+import com.robertlevonyan.demo.moviezkmm.sqldelight.MoviezDb
 import io.ktor.client.*
 import org.koin.core.context.startKoin
+import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
     appDeclaration()
-    modules(networkModule, commonModule)
+    modules(networkModule, commonModule, localModule)
 }
 
 // called by iOS
-fun initKoin() = initKoin {
-    modules(networkModule, commonModule)
+fun initKoin(vararg module: Module) = initKoin {
+    modules(listOf(networkModule, commonModule, localModule) + module.toList())
 }
 
 val networkModule = module {
     single { HttpClient() }
 
     single(named(BASE_URL)) { "https://api.themoviedb.org/3/" }
+}
+
+val localModule = module {
+    single { MoviezDb(get<DriverFactory>().createDriver()) }
+
+    single { get<MoviezDb>().moviezQueries }
 }
 
 val commonModule = module {
