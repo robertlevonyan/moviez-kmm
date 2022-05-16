@@ -8,9 +8,16 @@ import com.robertlevonyan.demo.moviezkmm.constants.Constants.REMOTE_DS_TV
 import com.robertlevonyan.demo.moviezkmm.data.DataSource
 import com.robertlevonyan.demo.moviezkmm.data.local.DriverFactory
 import com.robertlevonyan.demo.moviezkmm.data.local.LocalMoviesDataSource
+import com.robertlevonyan.demo.moviezkmm.data.local.LongListAdapter
 import com.robertlevonyan.demo.moviezkmm.data.remote.RemoteMoviesDataSource
 import com.robertlevonyan.demo.moviezkmm.data.remote.RemoteTvShowsDataSource
+import com.robertlevonyan.demo.moviezkmm.repository.MoviesRepository
+import com.robertlevonyan.demo.moviezkmm.repository.MoviesRepositoryImpl
+import com.robertlevonyan.demo.moviezkmm.repository.TvShowsRepository
+import com.robertlevonyan.demo.moviezkmm.repository.TvShowsRepositoryImpl
+import com.robertlevonyan.demo.moviezkmm.sqldelight.Movie
 import com.robertlevonyan.demo.moviezkmm.sqldelight.MoviezDb
+import com.robertlevonyan.demo.moviezkmm.sqldelight.Tvshow
 import io.ktor.client.*
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -20,12 +27,12 @@ import org.koin.dsl.module
 
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
     appDeclaration()
-    modules(networkModule, commonModule, localModule)
+    modules(networkModule, commonModule, localModule, repositoryModule)
 }
 
 // called by iOS
 fun initKoin(vararg module: Module) = initKoin {
-    modules(listOf(networkModule, commonModule, localModule) + module.toList())
+    modules(listOf(networkModule, commonModule, localModule, repositoryModule) + module.toList())
 }
 
 val networkModule = module {
@@ -35,9 +42,17 @@ val networkModule = module {
 }
 
 val localModule = module {
-    single { MoviezDb(get<DriverFactory>().createDriver()) }
+    single {
+        MoviezDb(
+            driver = get<DriverFactory>().createDriver(),
+            movieAdapter = Movie.Adapter(LongListAdapter()),
+            tvshowAdapter = Tvshow.Adapter(LongListAdapter()),
+        )
+    }
 
     single { get<MoviezDb>().moviezQueries }
+
+    single { get<MoviezDb>().tvShowsQueries }
 }
 
 val commonModule = module {
@@ -53,6 +68,21 @@ val commonModule = module {
         RemoteTvShowsDataSource(
             httpClient = get(),
             baseUrl = get(named(BASE_URL)),
+        )
+    }
+}
+
+val repositoryModule = module {
+    single<MoviesRepository> {
+        MoviesRepositoryImpl(
+            remoteMoviesDataSource = get(),
+            moviezQueries = get(),
+        )
+    }
+    single<TvShowsRepository> {
+        TvShowsRepositoryImpl(
+            remoteTvShowsDataSource = get(),
+            tvShowsQueries = get(),
         )
     }
 }

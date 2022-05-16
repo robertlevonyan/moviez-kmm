@@ -47,14 +47,11 @@ kotlin {
         }
         val androidTest by getting
         val iosMain by creating {
-            dependsOn(commonMain)
             dependencies {
                 implementation("com.squareup.sqldelight:native-driver:$sqldVersion")
             }
         }
-        val iosTest by creating {
-            dependsOn(commonTest)
-        }
+        val iosTest by creating
     }
 }
 

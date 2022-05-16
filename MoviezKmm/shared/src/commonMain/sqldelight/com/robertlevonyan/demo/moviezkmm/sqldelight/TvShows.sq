@@ -1,18 +1,18 @@
 import kotlin.collections.List;
 
-CREATE TABLE movie (
+CREATE TABLE tvshow (
  _id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
  backdrop_path TEXT,
  poster_path TEXT,
  genre_ids TEXT AS List<Long>,
- original_title TEXT,
- title TEXT,
+ original_name TEXT,
+ name TEXT,
  overview TEXT
 );
 
 selectAll:
- SELECT * FROM movie;
+ SELECT * FROM tvshow;
 
 insert:
- INSERT OR IGNORE INTO movie(_id, backdrop_path, poster_path, genre_ids, original_title, title, overview)
+ INSERT OR IGNORE INTO tvshow(_id, backdrop_path, poster_path, genre_ids, original_name, name, overview)
  VALUES ?;
