@@ -36,7 +36,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0-beta01"
+        kotlinCompilerExtensionVersion = "1.2.0-beta02"
     }
     kapt {
         correctErrorTypes = true
@@ -52,14 +52,15 @@ dependencies {
     implementation("com.google.android.material:material:1.6.0")
 
     implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
 
-    implementation("androidx.compose.compiler:compiler:1.2.0-beta01")
-    implementation("androidx.compose.ui:ui:1.2.0-beta01")
-    implementation("androidx.compose.material:material:1.2.0-beta01")
-    implementation("androidx.compose.ui:ui-tooling:1.2.0-beta01")
+    implementation("androidx.activity:activity-compose:1.6.0-alpha03")
+    implementation("androidx.compose.compiler:compiler:1.2.0-beta02")
+    implementation("androidx.compose.ui:ui:1.2.0-beta02")
+    implementation("androidx.compose.material:material:1.2.0-beta02")
+    implementation("androidx.compose.ui:ui-tooling:1.2.0-beta02")
 
-    implementation("io.coil-kt:coil-compose:1.4.0")
+    implementation("io.coil-kt:coil-compose:2.0.0")
 
     implementation("io.insert-koin:koin-android:3.1.6")
 }

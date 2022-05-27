@@ -8,15 +8,15 @@ data class TvShows(
     @SerialName("id")
     val id: Long,
     @SerialName("backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
     @SerialName("poster_path")
-    val posterPath: String,
+    val posterPath: String?,
     @SerialName("genre_ids")
-    val genreIds: List<Long>,
+    val genreIds: List<Long>?,
     @SerialName("original_name")
-    val originalName: String,
+    val originalName: String?,
     @SerialName("name")
-    val name: String,
+    val name: String?,
     @SerialName("overview")
-    val overview: String,
+    val overview: String?,
 )

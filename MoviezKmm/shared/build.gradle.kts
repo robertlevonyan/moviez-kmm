@@ -8,16 +8,16 @@ plugins {
 kotlin {
     android()
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-    ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
+    ios {
+        binaries {
+            framework {
+                baseName = "shared"
+            }
         }
     }
 
     sourceSets {
+        val coroutinesVersion = "1.6.1"
         val ktorVersion = "2.0.1"
         val serializationVersion = "1.3.2"
         val koinVersion = "3.1.6"
@@ -25,8 +25,13 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
+                implementation("io.ktor:ktor-client-logging:$ktorVersion")
+                implementation("io.ktor:ktor-client-cio:$ktorVersion")
+                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.insert-koin:koin-core:$koinVersion")
                 implementation("com.squareup.sqldelight:runtime:$sqldVersion")
             }
@@ -46,12 +51,12 @@ kotlin {
             }
         }
         val androidTest by getting
-        val iosMain by creating {
+        val iosMain by getting {
             dependencies {
                 implementation("com.squareup.sqldelight:native-driver:$sqldVersion")
             }
         }
-        val iosTest by creating
+        val iosTest by getting
     }
 }
 
